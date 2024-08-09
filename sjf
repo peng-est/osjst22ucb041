@@ -1,0 +1,29 @@
+#include <stdio.h>
+
+#define MAX_PROCESSES 10
+
+typedef struct { int id, bt, ct, wt, tt; } Process;
+
+void sjf(Process p[], int n) {
+    for (int i = 0; i < n-1; i++) // Sort by Burst Time
+        for (int j = i+1; j < n; j++)
+            if (p[i].bt > p[j].bt) { Process t = p[i]; p[i] = p[j]; p[j] = t; }
+
+    int time = 0;
+    for (int i = 0; i < n; i++) {
+        p[i].ct = (time += p[i].bt);
+        p[i].tt = p[i].ct;
+        p[i].wt = p[i].tt - p[i].bt;
+        printf("P%d BT:%d WT:%d TT:%d\n", p[i].id, p[i].bt, p[i].wt, p[i].tt);
+    }
+}
+
+int main() {
+    int n;
+    Process p[MAX_PROCESSES];
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) { p[i].id = i+1; printf("BT for P%d: ", i+1); scanf("%d", &p[i].bt); }
+    sjf(p, n);
+    return 0;
+}
