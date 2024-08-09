@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+#define MAX_PROCESSES 10
+
+typedef struct {
+    int id, arrival, burst, completion, turnaround, waiting;
+} Process;
+
+void fcfs(Process p[], int n) {
+    int time = 0, wt_sum = 0, tt_sum = 0;
+    printf("PID AT BT CT TT WT\n");
+    for (int i = 0; i < n; i++) {
+        if (time < p[i].arrival) time = p[i].arrival;
+        p[i].completion = time + p[i].burst;
+        p[i].turnaround = p[i].completion - p[i].arrival;
+        p[i].waiting = p[i].turnaround - p[i].burst;
+        wt_sum += p[i].waiting;
+        tt_sum += p[i].turnaround;
+        time += p[i].burst;
+        printf("%2d  %2d  %2d  %2d  %2d  %2d\n", p[i].id, p[i].arrival, p[i].burst, p[i].completion, p[i].turnaround, p[i].waiting);
+    }
+    printf("Avg WT: %.2f, Avg TT: %.2f\n", (float)wt_sum / n, (float)tt_sum / n);
+}
+
+int main() {
+    int n;
+    Process p[MAX_PROCESSES];
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        p[i].id = i + 1;
+        printf("AT and BT for P%d: ", i + 1);
+        scanf("%d %d", &p[i].arrival, &p[i].burst);
+    }
+    fcfs(p, n);
+    return 0;
+}
