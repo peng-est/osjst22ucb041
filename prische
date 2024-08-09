@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+#define MAX 10
+
+typedef struct {
+    int id, bt, priority, wt, tt;
+} Process;
+
+void priorityScheduling(Process p[], int n) {
+    for (int i = 0; i < n-1; i++)    // Sort by Priority
+        for (int j = i+1; j < n; j++)
+            if (p[i].priority > p[j].priority) {
+                Process t = p[i];
+                p[i] = p[j];
+                p[j] = t;
+            }
+    int time = 0;
+    for (int i = 0; i < n; i++) {
+        time += p[i].bt;
+        p[i].tt = time;
+        p[i].wt = p[i].tt - p[i].bt;
+        printf("P%d BT:%d P:%d WT:%d TT:%d\n", p[i].id, p[i].bt, p[i].priority, p[i].wt, p[i].tt);
+    }
+}
+
+int main() {
+    int n;
+    Process p[MAX];
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        p[i].id = i+1;
+        printf("BT and Priority for P%d: ", i+1);
+        scanf("%d %d", &p[i].bt, &p[i].priority);
+    }
+    priorityScheduling(p, n);
+    return 0;
+}
